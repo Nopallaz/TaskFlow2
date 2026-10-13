@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern To-Do List App</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 11l3 3L22 4"/>
+                        <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+                    </svg>
+                </div>
+                <h2>TaskFlow</h2>
+            </div>
+            
+            <div class="user-profile" id="open-profile-btn" title="Lihat & edit profil">
+                <div class="avatar" id="user-avatar"></div>
+                <div class="user-info">
+                    <span class="user-name" id="user-name"></span>
+                    <span class="user-status" id="user-status"></span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-filter="all">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"/>
+                        <rect x="14" y="3" width="7" height="7"/>
+                        <rect x="14" y="14" width="7" height="7"/>
+                        <rect x="3" y="14" width="7" height="7"/>
+                    </svg>
+                    <span>Semua Tugas</span>
+                    <span class="badge" id="badge-all">0</span>
+                </a>
+                <a href="#" class="nav-item" data-filter="today">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12,6 12,12 16,14"/>
+                    </svg>
+                    <span>Hari Ini</span>
+                    <span class="badge" id="badge-today">0</span>
+                </a>
+                <a href="#" class="nav-item" data-filter="upcoming">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    <span>Mendatang</span>
+                    <span class="badge" id="badge-upcoming">0</span>
+                </a>
+                <a href="#" class="nav-item" data-filter="completed">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                        <polyline points="22,4 12,14.01 9,11.01"/>
+                    </svg>
+                    <span>Selesai</span>
+                    <span class="badge" id="badge-completed">0</span>
+                </a>
+                <a href="#" class="nav-item" data-filter="overdue">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    <span>Terlambat</span>
+                    <span class="badge" id="badge-overdue">0</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-section">
+                <h3>Kategori</h3>
+                <div class="category-list" id="category-list">
+                    <!-- Categories will be rendered here -->
+                </div>
+                <button class="add-category-btn" id="add-category-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    Tambah Kategori
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Statistik</h3>
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l4.59-4.58L18 11l-6 6z"/>
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="stat-total">0</span>
+                            <span class="stat-label">Total Tugas</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="stat-completed">0</span>
+                            <span class="stat-label">Selesai</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                                <circle cx="12" cy="12" r="10"/>
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="stat-progress">0%</span>
+                            <span class="stat-label">Progress</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <div class="header-left">
+                    <button class="menu-toggle" id="menu-toggle">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="3" y1="12" x2="21" y2="12"/>
+                            <line x1="3" y1="6" x2="21" y2="6"/>
+                            <line x1="3" y1="18" x2="21" y2="18"/>
+                        </svg>
+                    </button>
+                    <div class="search-container">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        <input type="text" placeholder="Cari tugas..." id="search-input">
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="theme-toggle" id="theme-toggle" title="Toggle Theme">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="sun-icon">
+                            <circle cx="12" cy="12" r="5"/>
+                            <line x1="12" y1="1" x2="12" y2="3"/>
+                            <line x1="12" y1="21" x2="12" y2="23"/>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                            <line x1="1" y1="12" x2="3" y2="12"/>
+                            <line x1="21" y1="12" x2="23" y2="12"/>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                        </svg>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="moon-icon" style="display:none;">
+                            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+                        </svg>
+                    </button>
+                    <button class="theme-toggle" id="open-config-btn" title="Pengaturan Supabase">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                        </svg>
+                    </button>
+                    <button class="theme-toggle" id="logout-btn" title="Keluar">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+                            <polyline points="16 17 21 12 16 7"/>
+                            <line x1="21" y1="12" x2="9" y2="12"/>
+                        </svg>
+                    </button>
+                    <button class="notification-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                            <path d="M13.73 21a2 2 0 01-3.46 0"/>
+                        </svg>
+                        <span class="notification-dot"></span>
+                    </button>
+                    <div class="current-date" id="current-date"></div>
+                </div>
+            </header>
+
+            <div class="content-header">
+                <div class="title-section">
+                    <h1 id="page-title">Semua Tugas</h1>
+                    <p class="subtitle" id="page-subtitle">Kelola semua tugas Anda di satu tempat</p>
+                </div>
+                <div class="header-actions">
+                    <button class="clear-completed-btn" id="clear-completed-btn" type="button">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"/>
+                            <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                            <line x1="10" y1="11" x2="10" y2="17"/>
+                            <line x1="14" y1="11" x2="14" y2="17"/>
+                        </svg>
+                        Hapus Selesai
+                    </button>
+                    <button class="add-task-btn" id="add-task-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        Tambah Tugas
+                    </button>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-section" id="progress-section">
+                <div class="progress-header">
+                    <span>Progress Harian</span>
+                    <span id="progress-text">0 dari 0 tugas selesai</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+
+            <!-- Tasks Container -->
+            <div class="tasks-container" id="tasks-container">
+                <!-- Tasks will be rendered here -->
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="empty-state" style="display: none;">
+                <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <path d="M9 11l3 3L22 4"/>
+                    <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+                </svg>
+                <h3>Belum ada tugas</h3>
+                <p>Tambahkan tugas pertama Anda untuk memulai</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Task Modal -->
+    <div class="modal-overlay" id="task-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modal-title">Tambah Tugas Baru</h2>
+                <button class="modal-close" id="modal-close">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <form class="task-form" id="task-form">
+                <input type="hidden" id="task-id">
+                
+                <div class="form-group">
+                    <label for="task-title">Judul Tugas</label>
+                    <input type="text" id="task-title" placeholder="Masukkan judul tugas..." required>
+                </div>
+
+                <div class="form-group">
+                    <label for="task-description">Deskripsi</label>
+                    <textarea id="task-description" placeholder="Tambahkan deskripsi..." rows="3"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="task-date">Tanggal</label>
+                        <input type="date" id="task-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-time">Waktu</label>
+                        <input type="time" id="task-time">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="task-priority">Prioritas</label>
+                        <select id="task-priority">
+                            <option value="low">Rendah</option>
+                            <option value="medium" selected>Sedang</option>
+                            <option value="high">Tinggi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-category">Kategori</label>
+                        <select id="task-category">
+                            <!-- Categories will be populated here -->
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Tag</label>
+                    <div class="tags-input-container">
+                        <div class="tags-list" id="tags-list"></div>
+                        <input type="text" id="tag-input" class="tag-input" maxlength="21" placeholder="Ketik tag lalu tekan Enter...">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="task-reminder">Pengingat</label>
+                    <select id="task-reminder">
+                        <option value="none">Tidak ada</option>
+                        <option value="5">5 menit sebelum</option>
+                        <option value="15">15 menit sebelum</option>
+                        <option value="30">30 menit sebelum</option>
+                        <option value="60">1 jam sebelum</option>
+                        <option value="1440">1 hari sebelum</option>
+                    </select>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="task-repeat">
+                        <span class="checkmark"></span>
+                        Tugas Berulang
+                    </label>
+                    <select id="repeat-interval" disabled>
+                        <option value="daily">Setiap Hari</option>
+                        <option value="weekly">Setiap Minggu</option>
+                        <option value="monthly">Setiap Bulan</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-btn">Batal</button>
+                    <button type="submit" class="btn btn-primary" id="submit-btn">Simpan Tugas</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Category Modal -->
+    <div class="modal-overlay" id="category-modal">
+        <div class="modal modal-small">
+            <div class="modal-header">
+                <h2>Tambah Kategori</h2>
+                <button class="modal-close" id="category-modal-close">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <form class="category-form" id="category-form">
+                <div class="form-group">
+                    <label for="category-name">Nama Kategori</label>
+                    <input type="text" id="category-name" placeholder="Masukkan nama kategori..." required>
+                </div>
+                <div class="form-group">
+                    <label>Pilih Warna</label>
+                    <div class="color-picker">
+                        <input type="radio" name="category-color" value="#667eea" id="color-1" checked>
+                        <label for="color-1" style="background: #667eea;"></label>
+                        <input type="radio" name="category-color" value="#f093fb" id="color-2">
+                        <label for="color-2" style="background: #f093fb;"></label>
+                        <input type="radio" name="category-color" value="#11998e" id="color-3">
+                        <label for="color-3" style="background: #11998e;"></label>
+                        <input type="radio" name="category-color" value="#fc4a1a" id="color-4">
+                        <label for="color-4" style="background: #fc4a1a;"></label>
+                        <input type="radio" name="category-color" value="#ffd93d" id="color-5">
+                        <label for="color-5" style="background: #ffd93d;"></label>
+                        <input type="radio" name="category-color" value="#6c5ce7" id="color-6">
+                        <label for="color-6" style="background: #6c5ce7;"></label>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="category-cancel-btn">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading awal -->
+    <div class="boot-loader" id="boot-loader"><div class="spinner"></div></div>
+
+    <!-- Layar Login / Daftar / Lupa Password -->
+    <div class="auth-screen" id="auth-screen" hidden>
+        <div class="auth-card">
+            <div class="auth-logo">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 11l3 3L22 4"/>
+                    <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+                </svg>
+                <h2>TaskFlow</h2>
+            </div>
+            <p class="auth-subtitle" id="auth-subtitle">Pilih metode masuk yang Anda inginkan</p>
+
+            <!-- Status Koneksi Supabase -->
+            <div class="auth-status-bar" id="auth-status-bar">
+                <span class="status-indicator-badge demo" id="status-badge">⚡ Mode Demo Aktif</span>
+                <button type="button" class="btn-config-link" id="auth-open-config-btn">⚙️ Pengaturan Supabase</button>
+            </div>
+
+            <!-- Tab Metode Login Utama: Google, Gmail, WhatsApp -->
+            <div class="channel-tabs" id="channel-tabs">
+                <button type="button" class="channel-tab active" data-channel="google">
+                    <svg width="18" height="18" viewBox="0 0 48 48">
+                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                    </svg>
+                    <span>Google</span>
+                </button>
+                <button type="button" class="channel-tab" data-channel="email">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                        <polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                    <span>Gmail / Email</span>
+                </button>
+                <button type="button" class="channel-tab" data-channel="whatsapp">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#25D366">
+                        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                    </svg>
+                    <span>WhatsApp</span>
+                </button>
+            </div>
+
+            <div class="auth-message" id="auth-message" hidden></div>
+
+            <!-- Panel 1: GOOGLE -->
+            <div class="channel-panel active" id="channel-panel-google">
+                <div class="google-login-box">
+                    <p class="panel-desc">Masuk secara instan menggunakan akun Google untuk sinkronisasi tugas dan profil Anda.</p>
+                    <button type="button" class="btn btn-secondary google-btn" id="google-login-btn">
+                        <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true">
+                            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                        </svg>
+                        <span>Lanjutkan dengan Google</span>
+                    </button>
+                    <button type="button" class="btn btn-primary btn-block btn-demo-quick" id="google-demo-btn">
+                        <span>🚀 Masuk Cepat Akun Google Demo (1-Klik)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Panel 2: GMAIL / EMAIL -->
+            <div class="channel-panel" id="channel-panel-email">
+                <div class="auth-tabs" id="auth-tabs">
+                    <button type="button" class="auth-tab active" data-mode="login">Masuk</button>
+                    <button type="button" class="auth-tab" data-mode="register">Daftar</button>
+                    <button type="button" class="auth-tab" data-mode="magic">Magic Link</button>
+                </div>
+
+                <form id="auth-form">
+                    <div class="form-group" id="auth-name-group" hidden>
+                        <label for="auth-name">Nama Lengkap</label>
+                        <input type="text" id="auth-name" maxlength="50" autocomplete="name" placeholder="Nama Anda">
+                    </div>
+                    <div class="form-group">
+                        <label for="auth-email">Alamat Email / Gmail</label>
+                        <input type="email" id="auth-email" required autocomplete="email" placeholder="nama@gmail.com">
+                    </div>
+                    <div class="form-group" id="auth-password-group">
+                        <label for="auth-password">Password</label>
+                        <input type="password" id="auth-password" required minlength="6" autocomplete="current-password" placeholder="Minimal 6 karakter">
+                    </div>
+                    <button type="submit" class="btn btn-primary auth-submit" id="auth-submit">Masuk</button>
+                </form>
+
+                <button type="button" class="link-btn" id="auth-forgot">Lupa password?</button>
+                <button type="button" class="link-btn" id="auth-back" hidden>&larr; Kembali ke halaman masuk</button>
+            </div>
+
+            <!-- Panel 3: WHATSAPP -->
+            <div class="channel-panel" id="channel-panel-whatsapp">
+                <div class="whatsapp-auth-box">
+                    <div id="wa-step-phone">
+                        <p class="panel-desc">Masukkan nomor WhatsApp aktif Anda untuk menerima kode OTP verifikasi.</p>
+                        <div class="form-group">
+                            <label for="wa-phone-input">Nomor WhatsApp</label>
+                            <div class="phone-input-row">
+                                <select id="wa-phone-prefix" class="phone-prefix-select">
+                                    <option value="+62">🇮🇩 +62</option>
+                                    <option value="+60">🇲🇾 +60</option>
+                                    <option value="+65">🇸🇬 +65</option>
+                                    <option value="+1">🇺🇸 +1</option>
+                                </select>
+                                <input type="tel" id="wa-phone-input" placeholder="812-3456-7890" autocomplete="tel-national">
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-whatsapp btn-block" id="wa-send-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                            </svg>
+                            <span>Kirim Kode OTP via WhatsApp</span>
+                        </button>
+                    </div>
+
+                    <div id="wa-step-verify" style="display: none;">
+                        <p class="panel-desc">Masukkan 6 digit kode OTP yang telah dikirim ke WhatsApp <strong id="wa-phone-display">+62</strong></p>
+                        <div class="form-group">
+                            <label for="wa-otp-input">Kode OTP (6 Digit)</label>
+                            <input type="text" id="wa-otp-input" class="otp-input" maxlength="6" placeholder="1 2 3 4 5 6" autocomplete="one-time-code">
+                            <small class="demo-otp-hint" id="wa-otp-hint">💡 Mode Demo: Gunakan kode <strong>123456</strong> untuk masuk seketika.</small>
+                        </div>
+                        <button type="button" class="btn btn-whatsapp btn-block" id="wa-verify-btn">Verifikasi & Masuk</button>
+                        <button type="button" class="link-btn" id="wa-change-phone-btn">&larr; Ganti Nomor WhatsApp</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Profil -->
+    <div class="modal-overlay" id="profile-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Profil Saya</h2>
+                <button class="modal-close" id="profile-modal-close" type="button">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="profile-body">
+                <div class="profile-avatar-row">
+                    <div class="avatar avatar-lg" id="profile-avatar-preview"></div>
+                    <div class="profile-avatar-actions">
+                        <div class="profile-avatar-buttons">
+                            <button type="button" class="btn btn-secondary btn-sm" id="avatar-change-btn">Ganti Foto</button>
+                            <button type="button" class="btn btn-secondary btn-sm" id="avatar-remove-btn">Hapus Foto</button>
+                        </div>
+                        <small>JPG, PNG, atau WebP. Maksimal 2 MB.</small>
+                        <input type="file" id="avatar-input" accept="image/png,image/jpeg,image/webp" hidden>
+                    </div>
+                </div>
+
+                <form id="profile-form">
+                    <div class="form-group">
+                        <label for="profile-name">Nama Lengkap</label>
+                        <input type="text" id="profile-name" maxlength="50" required placeholder="Nama Anda">
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-whatsapp">Nomor WhatsApp</label>
+                        <input type="tel" id="profile-whatsapp" placeholder="+62 812-3456-7890" maxlength="25">
+                        <small class="form-hint">Nomor WhatsApp aktif untuk kontak profil Anda.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-bio">Bio / Status</label>
+                        <textarea id="profile-bio" rows="2" maxlength="160" placeholder="Ceritakan sedikit tentang Anda..."></textarea>
+                    </div>
+                    <div class="form-actions form-actions-start">
+                        <button type="submit" class="btn btn-primary" id="profile-save-btn">Simpan Profil</button>
+                    </div>
+                </form>
+
+                <h3 class="profile-section-title">Ubah Email</h3>
+                <form id="email-form">
+                    <div class="form-group">
+                        <label for="profile-email">Email Saat Ini</label>
+                        <input type="email" id="profile-email" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-email">Email Baru</label>
+                        <input type="email" id="new-email" required autocomplete="email">
+                    </div>
+                    <div class="form-actions form-actions-start">
+                        <button type="submit" class="btn btn-secondary" id="email-save-btn">Ubah Email</button>
+                    </div>
+                </form>
+
+                <h3 class="profile-section-title">Ubah Password</h3>
+                <form id="password-form">
+                    <div class="form-group">
+                        <label for="new-password">Password Baru</label>
+                        <input type="password" id="new-password" required minlength="6" autocomplete="new-password">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Ulangi Password Baru</label>
+                        <input type="password" id="confirm-password" required minlength="6" autocomplete="new-password">
+                    </div>
+                    <div class="form-actions form-actions-start">
+                        <button type="submit" class="btn btn-secondary" id="password-save-btn">Ubah Password</button>
+                    </div>
+                </form>
+
+                <h3 class="profile-section-title danger">Zona Berbahaya</h3>
+                <p class="profile-danger-text">Menghapus akun akan menghapus profil, semua tugas, dan kategori Anda secara permanen.</p>
+                <button type="button" class="btn btn-danger" id="delete-account-btn">Hapus Akun</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Password Baru (dari link reset password) -->
+    <div class="modal-overlay" id="reset-modal">
+        <div class="modal modal-small">
+            <div class="modal-header">
+                <h2>Buat Password Baru</h2>
+            </div>
+            <form class="task-form" id="reset-form">
+                <div class="form-group">
+                    <label for="reset-password">Password Baru</label>
+                    <input type="password" id="reset-password" required minlength="6" autocomplete="new-password">
+                </div>
+                <div class="form-group">
+                    <label for="reset-confirm">Ulangi Password Baru</label>
+                    <input type="password" id="reset-confirm" required minlength="6" autocomplete="new-password">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" id="reset-save-btn">Simpan Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Pengaturan Supabase Cloud -->
+    <div class="modal-overlay" id="supabase-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Pengaturan Supabase Cloud</h2>
+                <button class="modal-close" id="supabase-modal-close" type="button">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-desc">Hubungkan aplikasi ini ke project Supabase Anda untuk menyimpan data akun, profil, dan tugas secara online.</p>
+                
+                <div class="config-status-box" id="config-status-box">
+                    <span id="config-status-text">⚡ Status: Mode Demo / Lokal</span>
+                </div>
+
+                <form id="supabase-config-form">
+                    <div class="form-group">
+                        <label for="config-supabase-url">Supabase Project URL</label>
+                        <input type="url" id="config-supabase-url" placeholder="https://xxxxxxxx.supabase.co" autocomplete="url">
+                        <small class="form-hint">Dapat ditemukan di Supabase Dashboard &rarr; Project Settings &rarr; API.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="config-supabase-key">Supabase Anon Public Key</label>
+                        <input type="text" id="config-supabase-key" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+                        <small class="form-hint">Gunakan 'anon' / 'public' key (Aman ditaruh di browser).</small>
+                    </div>
+
+                    <div class="sql-box">
+                        <div class="sql-box-header">
+                            <span>Setup Database SQL (Tabel Profiles, Categories, Tasks)</span>
+                            <button type="button" class="btn-copy-sql" id="config-copy-sql">📋 Salin SQL</button>
+                        </div>
+                        <small class="form-hint">Jalankan skrip di menu <strong>SQL Editor</strong> dashboard Supabase Anda.</small>
+                    </div>
+
+                    <div class="form-actions space-between">
+                        <button type="button" class="btn btn-secondary" id="config-reset-demo-btn">Gunakan Mode Demo</button>
+                        <div class="btn-group-right">
+                            <button type="button" class="btn btn-secondary" id="config-cancel-btn">Tutup</button>
+                            <button type="submit" class="btn btn-primary" id="config-save-btn">Simpan & Hubungkan</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

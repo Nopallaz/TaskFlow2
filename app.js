@@ -624,10 +624,23 @@ function initAuth() {
         return;
     }
 
+    // Fallback: jika onAuthStateChange tidak terpanggil dalam 8 detik
+    // (misal koneksi lambat / Supabase timeout), paksa tampilkan auth screen
+    let authResolved = false;
+    const authFallbackTimer = setTimeout(() => {
+        if (!authResolved) {
+            console.warn('Auth state timeout — menampilkan layar login.');
+            showAuthScreen();
+            setAuthMessage('Koneksi ke server lambat. Silakan coba lagi.', 'info');
+        }
+    }, 8000);
+
     // INITIAL_SESSION dipicu otomatis saat subscribe (sesi tersimpan atau null).
     // Jangan memanggil method Supabase langsung di dalam callback -> bungkus setTimeout.
     sb.auth.onAuthStateChange((event, session) => {
         setTimeout(() => {
+            authResolved = true;
+            clearTimeout(authFallbackTimer);
             if (session && session.user) {
                 if (currentUser && currentUser.id === session.user.id) {
                     currentUser = session.user; // refresh token / update user

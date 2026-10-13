@@ -1,5 +1,13 @@
 /* TaskFlow - To-Do List App (Supabase edition: login, profil, data per pengguna) */
 
+// Failsafe: jika ada error JS apapun, pastikan spinner loading selalu hilang
+window.onerror = function () {
+    const loader = document.getElementById('boot-loader');
+    const authScreen = document.getElementById('auth-screen');
+    if (loader) loader.hidden = true;
+    if (authScreen) authScreen.hidden = false;
+};
+
 // =====================================================================
 // KONFIGURASI SUPABASE
 // Supabase Dashboard > Project Settings > API
@@ -10,8 +18,17 @@ const SUPABASE_URL = 'https://stprifbkuiozycxxkdfs.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0cHJpZmJrdWlvenljeHhrZGZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE4Nzc0NzksImV4cCI6MjEwNzQ1MzQ3OX0.YvSH0yfCXLu10gartgvbUUXzt7XjkrmVix5qCyM06qk';
 
 const APP_URL = window.location.origin + window.location.pathname;
-const isConfigured = !SUPABASE_URL.includes('YOUR-PROJECT-ID') && !SUPABASE_ANON_KEY.includes('YOUR-ANON');
-const sb = isConfigured ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+const isConfigured = !SUPABASE_URL.includes('YOUR-PROJECT-ID') && !SUPABASE_ANON_KEY.includes('YOUR-ANON') && typeof window.supabase !== 'undefined';
+let sb = null;
+try {
+    sb = isConfigured ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+} catch (e) {
+    console.error('Gagal inisialisasi Supabase client:', e);
+    const loader = document.getElementById('boot-loader');
+    const authScreen = document.getElementById('auth-screen');
+    if (loader) loader.hidden = true;
+    if (authScreen) authScreen.hidden = false;
+}
 
 // App State
 let tasks = [];
